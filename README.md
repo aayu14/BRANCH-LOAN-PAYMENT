@@ -1,1 +1,1 @@
-loan repayment schdule with payment
+loan repayment schdule passing a journal at particula paymnet date
