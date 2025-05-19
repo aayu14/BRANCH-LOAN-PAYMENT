@@ -12,7 +12,7 @@ define(['N/record', 'N/log'], function (record, log) {
             var loanId = loanRec.id;
 
             var loanType = loanRec.getValue('custrecord_st_repay_loan_type');
-            if (loanType != 1) {
+            if (loanType != 4) {
                 log.debug('Loan Type Check', 'Script will not execute as custrecord_st_repay_loan_type is not 1');
                 return;
             }
@@ -32,7 +32,7 @@ define(['N/record', 'N/log'], function (record, log) {
                 return;
             }
 
-            var paymentDateValue = loanRec.getValue('custrecord_payment_date');
+            var paymentDateValue = loanRec.getValue('custrecord_payment_dates');
             var fixedPaymentDay = null;
             if (paymentDateValue) {
                 if (paymentDateValue instanceof Date) {
@@ -94,10 +94,11 @@ define(['N/record', 'N/log'], function (record, log) {
                 vendorid: vendorid,
                 daysInMonth: 0,
                 month: getMonthName(startDate.getMonth()) + ' ' + startDate.getFullYear(),
-                expense: 0
+                expense: 0,
+                pfother_charge:pfother_charge
             });
 
-        
+            remainingBalance = roundToTwo(remainingBalance - pfother_charge);
             var endOfStartMonth = getLastDayOfMonth(startDate);
             if (endOfStartMonth > endDate) {
                 endOfStartMonth = new Date(endDate);
@@ -144,7 +145,7 @@ define(['N/record', 'N/log'], function (record, log) {
                 var tds = interest * TDS_RATE;
                 var netInterest = parseFloat((interest - tds).toFixed(2));
                 var expense = remainingBalance * dailyInterest * daysInPeriod;
-
+                  var pfother_charge = parseFloat(loanRec.getValue('custrecord_st_pf_other_charge') || 0);
                 var principal = 0;
                 if (currentDate.getTime() === endDate.getTime()) {
                     principal = remainingBalance;

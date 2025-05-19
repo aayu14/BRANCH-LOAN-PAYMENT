@@ -38,7 +38,7 @@ define(['N/record', 'N/search', 'N/log'], function (record, search, log) {
             // if (!fixedPaymentDay || fixedPaymentDay < 1 || fixedPaymentDay > 31) {
             //     throw new Error('Invalid payment day specified. Must be between 1 and 31.');
             // }
-            var paymentDateValue = loanRec.getValue('custrecord_payment_date');
+            var paymentDateValue = loanRec.getValue('custrecord_payment_dates');
             var fixedPaymentDay = null;
             if (paymentDateValue) {
                 if (paymentDateValue instanceof Date) {
